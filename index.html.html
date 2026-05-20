@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<meta name="theme-color" content="#1D9E75" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="7aql" />
+<title>7aql — ٧ەقڵ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --accent: #1D9E75;
+    --accent-dark: #0F6E56;
+    --accent-light: #E1F5EE;
+    --danger: #E24B4A;
+    --danger-light: #FCEBEB;
+    --bg: #F7F9F8;
+    --surface: #ffffff;
+    --border: rgba(0,0,0,0.1);
+    --text: #1a1a1a;
+    --text-2: #555;
+    --text-3: #999;
+    --radius: 14px;
+    --radius-sm: 9px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 12px rgba(0,0,0,0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1410;
+      --surface: #1a231e;
+      --border: rgba(255,255,255,0.1);
+      --text: #f0f0f0;
+      --text-2: #aaa;
+      --text-3: #666;
+      --accent-light: #0a2e22;
+      --shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+  }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  body[dir="rtl"] { font-family: 'IBM Plex Sans Arabic', sans-serif; }
+
+  .app {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 0 80px;
+  }
+
+  /* Header */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+
+  .lang-toggle {
+    display: flex;
+    background: var(--bg);
+    border-radius: 20px;
+    padding: 3px;
+    gap: 2px;
+  }
+
+  .lang-btn {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 13px;
+    border-radius: 16px;
+    border: none;
+    background: transparent;
+    color: var(--text-3);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .lang-btn.active {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* Summary */
+  .summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    padding: 16px;
+  }
+
+  .sum-card {
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    padding: 12px 10px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+
+  .sum-label {
+    font-size: 11px;
+    color: var(--text-3);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sum-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  /* Form */
+  .form-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    margin: 0 16px 16px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+
+  .form-row { margin-bottom: 13px; }
+  .form-row:last-child { margin-bottom: 0; }
+
+  .form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-2);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .input-row { display: flex; gap: 8px; }
+
+  input[type="number"],
+  input[type="date"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-family: inherit;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+  }
+
+  input[type="number"]:focus,
+  input[type="date"]:focus,
+  textarea:focus,
+  select:focus {
+    border-color: var(--accent);
+  }
+
+  .currency-sel {
+    width: 95px;
+    flex-shrink: 0;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  textarea {
+    resize: none;
+    min-height: 60px;
+    line-height: 1.5;
+  }
+
+  .save-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.15s, transform 0.1s;
+    letter-spacing: 0.01em;
+  }
+
+  .save-btn:active { background: var(--accent-dark); transform: scale(0.98); }
+
+  /* Records */
+  .section-header {
+    padding: 0 16px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .records { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; }
+
+  .record-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 13px 14px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    animation: fadeIn 0.2s ease;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  .rec-left { flex: 1; min-width: 0; }
+
+  .rec-amount {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1.2;
+  }
+
+  .rec-currency {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-3);
+    margin-left: 3px;
+  }
+
+  .rec-note {
+    font-size: 13px;
+    color: var(--text-2);
+    margin-top: 4px;
+    line-height: 1.4;
+    word-break: break-word;
+  }
+
+  .rec-date {
+    font-size: 11px;
+    color: var(--text-3);
+    margin-top: 5px;
+  }
+
+  .del-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-3);
+    padding: 4px;
+    border-radius: 6px;
+    transition: color 0.15s, background 0.15s;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .del-btn:active { color: var(--danger); background: var(--danger-light); }
+
+  .del-btn svg { display: block; width: 18px; height: 18px; }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-3);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .empty-icon { font-size: 36px; margin-bottom: 10px; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: calc(24px + env(safe-area-inset-bottom));
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    background: #1a1a1a;
+    color: #fff;
+    padding: 9px 20px;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.25s, transform 0.25s;
+    pointer-events: none;
+    z-index: 999;
+    white-space: nowrap;
+  }
+
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (prefers-color-scheme: dark) {
+    .toast { background: #e0e0e0; color: #1a1a1a; }
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <div class="header">
+    <div class="logo">7aql &mdash; ٧ەقڵ</div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('ku')">کو</button>
+    </div>
+  </div>
+
+  <div class="summary">
+    <div class="sum-card">
+      <div class="sum-label" id="lbl-susd">Total USD</div>
+      <div class="sum-value" id="sum-usd">$0</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-label" id="lbl-siqd">Total IQD</div>
+      <div class="sum-value" id="sum-iqd">0</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-label" id="lbl-srec">Records</div>
+      <div class="sum-value" id="sum-cnt">0</div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-row">
+      <label class="form-label" id="lbl-amount">Amount</label>
+      <div class="input-row">
+        <input type="number" id="inp-amount" inputmode="decimal" min="0" step="any" placeholder="0" />
+        <select class="currency-sel" id="inp-currency">
+          <option value="USD">$ USD</option>
+          <option value="IQD">IQD</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <label class="form-label" id="lbl-note">Note</label>
+      <textarea id="inp-note" rows="2" placeholder="What did you spend on?"></textarea>
+    </div>
+    <div class="form-row">
+      <label class="form-label" id="lbl-date">Date</label>
+      <input type="date" id="inp-date" />
+    </div>
+    <button class="save-btn" onclick="saveRecord()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      <span id="lbl-save">Save</span>
+    </button>
+  </div>
+
+  <div class="section-header" id="lbl-history">History</div>
+  <div class="records" id="records-list"></div>
+  <div class="empty-state" id="empty-msg">
+    <div class="empty-icon">💸</div>
+    <span>No records yet.<br>Add your first expense above.</span>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = '7aql_v1';
+
+const T = {
+  en: {
+    amount: 'Amount', note: 'Note', date: 'Date', save: 'Save',
+    susd: 'Total USD', siqd: 'Total IQD', srec: 'Records',
+    history: 'History',
+    empty: '<div class="empty-icon">💸</div><span>No records yet.<br>Add your first expense above.</span>',
+    notePh: 'What did you spend on?',
+    saved: '✓ Saved', deleted: 'Deleted',
+    confirm: 'Delete this record?'
+  },
+  ku: {
+    amount: 'بڕی پارە', note: 'تێبینی', date: 'بەروار', save: 'پاشەکەوت بکە',
+    susd: 'کۆی دۆلار', siqd: 'کۆی دینار', srec: 'تۆمار',
+    history: 'مێژووی خەرجەکان',
+    empty: '<div class="empty-icon">💸</div><span>هیچ تۆمارێک نییە.<br>یەکەمین خەرجیت زیاد بکە.</span>',
+    notePh: 'بۆچی خەرج کردت؟',
+    saved: '✓ پاشەکەوت کرا', deleted: 'سڕایەوە',
+    confirm: 'ئەم تۆمارە بسڕیتەوە؟'
+  }
+};
+
+let lang = 'en';
+let records = [];
+
+function setLang(l) {
+  lang = l;
+  const app = document.getElementById('app');
+  app.dir = l === 'ku' ? 'rtl' : 'ltr';
+  document.documentElement.lang = l === 'ku' ? 'ckb' : 'en';
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', (l === 'en' && b.textContent === 'EN') || (l === 'ku' && b.textContent === 'کو'));
+  });
+  const L = T[l];
+  document.getElementById('lbl-amount').textContent = L.amount;
+  document.getElementById('lbl-note').textContent = L.note;
+  document.getElementById('lbl-date').textContent = L.date;
+  document.getElementById('lbl-save').textContent = L.save;
+  document.getElementById('lbl-susd').textContent = L.susd;
+  document.getElementById('lbl-siqd').textContent = L.siqd;
+  document.getElementById('lbl-srec').textContent = L.srec;
+  document.getElementById('lbl-history').textContent = L.history;
+  document.getElementById('inp-note').placeholder = L.notePh;
+  renderRecords();
+}
+
+function today() {
+  return new Date().toISOString().split('T')[0];
+}
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    records = raw ? JSON.parse(raw) : [];
+  } catch(e) { records = []; }
+  renderRecords();
+}
+
+function persist() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+}
+
+function saveRecord() {
+  const amtEl = document.getElementById('inp-amount');
+  const amount = parseFloat(amtEl.value);
+  if (!amount || amount <= 0) { amtEl.focus(); return; }
+  const currency = document.getElementById('inp-currency').value;
+  const note = document.getElementById('inp-note').value.trim();
+  const date = document.getElementById('inp-date').value || today();
+  records.unshift({ id: Date.now(), amount, currency, note, date });
+  persist();
+  amtEl.value = '';
+  document.getElementById('inp-note').value = '';
+  showToast(T[lang].saved);
+  renderRecords();
+}
+
+function deleteRecord(id) {
+  if (!confirm(T[lang].confirm)) return;
+  records = records.filter(r => r.id !== id);
+  persist();
+  showToast(T[lang].deleted);
+  renderRecords();
+}
+
+function fmtAmount(r) {
+  if (r.currency === 'USD') {
+    return '$' + parseFloat(r.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  return parseFloat(r.amount).toLocaleString() + '<span class="rec-currency">IQD</span>';
+}
+
+function renderRecords() {
+  let usd = 0, iqd = 0;
+  records.forEach(r => r.currency === 'USD' ? usd += r.amount : iqd += r.amount);
+  document.getElementById('sum-usd').textContent = '$' + usd.toLocaleString(undefined, {maximumFractionDigits: 2});
+  document.getElementById('sum-iqd').textContent = iqd.toLocaleString();
+  document.getElementById('sum-cnt').textContent = records.length;
+
+  const list = document.getElementById('records-list');
+  const empty = document.getElementById('empty-msg');
+  empty.innerHTML = T[lang].empty;
+  empty.style.display = records.length === 0 ? 'block' : 'none';
+  list.innerHTML = '';
+
+  records.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'record-card';
+    card.innerHTML = `
+      <div class="rec-left">
+        <div class="rec-amount">${fmtAmount(r)}</div>
+        ${r.note ? `<div class="rec-note">${r.note.replace(/</g,'&lt;')}</div>` : ''}
+        <div class="rec-date">📅 ${r.date}</div>
+      </div>
+      <button class="del-btn" onclick="deleteRecord(${r.id})" aria-label="delete">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
+        </svg>
+      </button>`;
+    list.appendChild(card);
+  });
+}
+
+document.getElementById('inp-date').value = today();
+
+document.getElementById('inp-amount').addEventListener('keydown', e => {
+  if (e.key === 'Enter') saveRecord();
+});
+
+load();
+</script>
+</body>
+</html>
